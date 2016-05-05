@@ -25,3 +25,27 @@ local.properties
 
 # Locally stored "Eclipse launch configurations"
 *.launch
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+Go4Eat.iml
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+# bower
+src/main/webapp/bower_components/
+
+# Derby
+derby.log
