@@ -8,7 +8,7 @@ public class Ejercicio6 {
 	
 		int tamanyo = 10;
 		
-		Vector vector = new Vector(tamanyo); 
+		IVector vector = new Vector(tamanyo); 
 		
 		for (int i = 0; i < tamanyo; i++) {
 			vector.guardar(new String("Posicion " + i), i);
@@ -23,8 +23,6 @@ public class Ejercicio6 {
 		vector.eliminarTodos();
 
 		imprimir(tamanyo, vector);
-		
-		vector.decirHola();
 		
 	}
 
