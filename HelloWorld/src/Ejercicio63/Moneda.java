@@ -19,12 +19,5 @@ public class Moneda extends Sorteo {
 			
 		return numeroRandom;	
 	}
-	
-	@Override
-	public void saludar(){
-		System.out.println("Hola, soy una moneda.");
-	}
-	
-	
 
 }

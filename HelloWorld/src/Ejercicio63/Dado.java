@@ -7,8 +7,7 @@ public class Dado extends Sorteo{
 	private int numeroRandom;
 	
 	@Override
-	public int lanzar() {
-		
+	public int lanzar() {	
 		super.posibilidades = 6;
 		
 		Random random = new Random();
@@ -16,10 +15,6 @@ public class Dado extends Sorteo{
 		
 		System.out.println(numeroRandom);
 		return numeroRandom;
-	}
-	
-	public void saludar(){
-		System.out.println("Hola, soy un dado.");
 	}
 
 }
