@@ -19,7 +19,11 @@ public class Regalo {
 		
 		
 	}
-
+      
+	
+	
+	
+	
 	private static void imprimir(Articulo[] articulos) {
 		for (int i = 0; i < articulos.length; i++){
 			System.out.println(articulos[i]);
