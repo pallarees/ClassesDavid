@@ -63,22 +63,30 @@ public class Gestion {
 		while (opcion != "9") {
 			switch (opcion) {
 			case "1":
-				altaAlumno(scanner, nombreAlumno);
+				if (alumnosActuales < maximoAlumnos) {
+					alumnos[alumnosActuales++] = altaAlumno(scanner, nombreAlumno, alumnos);
+				} else {
+					System.out.println("La base de datos de alumnos está llena.");
+				}
 				break;
 			case "2":
-				altaAdministrativo(scanner, nombreAdministracion);
+				if (administrativosActuales < maximoAdministracion) {
+					administrativos[administrativosActuales++] = altaAdministrativo(scanner, nombreAdministracion);
+				} else {
+					System.out.println("La base de datos de administración está llena.");
+				}
 				break;
 			case "3":
-				modificarAlumno();
+				modificarAlumno(scanner, alumnos);
 				break;
 			case "4":
-				modificarAdministrativo();
+				modificarAdministrativo(scanner, administrativos);
 				break;
 			case "5":
-				eliminarAlumno();
+				eliminarAlumno(scanner, alumnos);
 				break;
 			case "6":
-				eliminarAdministrativo();
+				eliminarAdministrativo(scanner, administrativos);
 				break;
 			case "7":
 				mostrarAlumnos(alumnos);
@@ -100,6 +108,121 @@ public class Gestion {
 
 	}
 
+	private static void eliminarAdministrativo(Scanner scanner, Administracion[] administrativos) {
+		// TODO Auto-generated method stub
+	}
+
+	private static void eliminarAlumno(Scanner scanner, Alumno[] alumnos) {
+		System.out.println("Introduce el NIF del alumno que deseas borrar: ");
+		String NIF = scanner.next();
+		boolean encontrado = false;
+		int i = 0;
+		while (!encontrado && i < alumnos.length) {
+			if (alumnos[i++].NIF.equals(NIF))
+				encontrado = true;
+		}
+		if (encontrado)
+			alumnos[i - 1] = null;
+	}
+
+	private static void modificarAdministrativo(Scanner scanner, Administracion[] administrativos) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private static void modificarAlumno(Scanner scanner, Alumno[] alumnos) {
+		System.out.println("Introduce el NIF del alumno que deseas modificar: ");
+		String NIF = scanner.next();
+		boolean encontrado = false;
+		int i = 0;
+		while (!encontrado && i < alumnos.length) {
+			if (alumnos[i++].NIF.equals(NIF))
+				encontrado = true;
+		}
+
+		if (encontrado) {
+
+			Alumno alumno = alumnos[i - 1];
+
+			System.out.println("Apellido del alumno: ");
+
+			String nombreAlumno = scanner.next();
+
+			if (nombreAlumno.length() > 0)
+				alumno.nombre = nombreAlumno;
+
+			System.out.println("Apellido del alumno: ");
+
+			String apellidoAlumno = scanner.next();
+
+			if (apellidoAlumno.length() > 0)
+				alumno.apellido = scanner.next();
+
+			System.out.println("Edad del alumno: ");
+
+			String edadAlumno = scanner.next();
+
+			if (edadAlumno.length() > 0) {
+				if (esEntero(edadAlumno)) {
+					alumno.edad = Integer.parseInt(edadAlumno);
+				} else {
+					while (!scanner.hasNextInt()) {
+						System.out.println("Dato incorrecto. Introduce la edad del alumno: ");
+						edadAlumno = scanner.next();
+					}
+					alumno.edad = Integer.parseInt(edadAlumno);
+				}
+			}
+
+			System.out.println("Sexo del alumno (M/F): ");
+
+			String sexo = scanner.next();
+			if (sexo.length() > 0) {
+				while (!(sexo.equals("M") || sexo.equals("F"))) {
+					System.out.println("Dato incorrecto. Introduce el sexo del alumno: ");
+					sexo = scanner.next();
+				}
+
+				alumno.sexo = sexo;
+			}
+
+			System.out.println("Ciclo del alumno: ");
+
+			String cicloAlumno = scanner.next();
+
+			if (cicloAlumno.length() > 0)
+				alumno.ciclo = cicloAlumno;
+
+			System.out.println("Horario del alumno (M/T): ");
+
+			String horario = scanner.next();
+
+			if (horario.length() > 0) {
+				while (!(horario.equals("M") || horario.equals("T"))) {
+					System.out.println("Dato incorrecto. Introduce el horario del alumno: ");
+					horario = scanner.next();
+				}
+				alumno.horario = horario;
+			}
+
+			System.out.println("Nota media del alumno: ");
+
+			String notaMediaAlumno = scanner.next();
+
+			if (notaMediaAlumno.length() > 0) {
+				if (esDecimal(notaMediaAlumno)) {
+					alumno.notaMedia = Double.parseDouble(notaMediaAlumno);
+				} else {
+					while (!scanner.hasNextDouble()) {
+						System.out.println("Dato incorrecto. Introduce la nota media del alumno: ");
+						notaMediaAlumno = scanner.next();
+					}
+					alumno.notaMedia = Double.parseDouble(notaMediaAlumno);
+				}
+			}
+		}
+	}
+
 	private static void mostrarAdministrativos(Administracion[] administrativos) {
 		for (int i = 0; i < administrativos.length; i++) {
 			if (!(administrativos[i] == null))
@@ -108,10 +231,6 @@ public class Gestion {
 	}
 
 	private static void mostrarAlumnos(Alumno[] alumnos) {
-		// for (Alumno alumno : alumnos){
-		// System.out.println(alumno);
-		// }
-		//
 		for (int i = 0; i < alumnos.length; i++) {
 			if (!(alumnos[i] == null))
 				System.out.println(alumnos[i]);
@@ -236,6 +355,24 @@ public class Gestion {
 
 		alumno.notaMedia = scanner.nextDouble();
 		return alumno;
+	}
+
+	private static boolean esEntero(String cadena) {
+		try {
+			Integer.parseInt(cadena);
+			return true;
+		} catch (NumberFormatException nfe) {
+		}
+		return false;
+	}
+
+	private static boolean esDecimal(String cadena) {
+		try {
+			Double.parseDouble(cadena);
+			return true;
+		} catch (NumberFormatException nfe) {
+		}
+		return false;
 	}
 
 }
