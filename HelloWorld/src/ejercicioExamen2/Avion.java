@@ -2,16 +2,22 @@ package ejercicioExamen2;
 
 public class Avion {
 
+	final int VELOCIDAD_MINIMA = 100;
+	
 	int altitud;
 	int velocidad;
 	int peso;
+	int pasajeros;
+	
+	protected int maximoPasajeros;
 	
 	boolean congelado = true;
 	
-	public Avion(int altitud, int velocidad, int peso) {
+	public Avion(int altitud, int velocidad, int peso, int pasajeros) {
 		this.altitud = altitud;
 		this.velocidad = velocidad;
 		this.peso = peso;
+		this.pasajeros = pasajeros;
 	}
 	
 	public void aumentarVelocidad(){
@@ -19,13 +25,16 @@ public class Avion {
 	}
 	
 	public void disminuirVelocidad(){
-		velocidad--;
+		if(velocidad > 100) velocidad--;
 	}
 	
 	public void descongelar(){
 		congelado = false;
 	}
 	
-	
+	public int asientosLibres() {
+		return maximoPasajeros - pasajeros;
+	}
+
 	
 }
