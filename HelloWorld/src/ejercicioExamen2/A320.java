@@ -9,6 +9,4 @@ public class A320 extends Avion {
 		this.pasajeros = pasajeros;
 		this.maximoPasajeros = 100;
 	}
-
-
 }

@@ -64,7 +64,7 @@ public class Gestion {
 			switch (opcion) {
 			case "1":
 				if (alumnosActuales < maximoAlumnos) {
-					alumnos[alumnosActuales++] = altaAlumno(scanner, nombreAlumno, alumnos);
+//					alumnos[alumnosActuales++] = altaAlumno(scanner, nombreAlumno, alumnos);
 				} else {
 					System.out.println("La base de datos de alumnos está llena.");
 				}

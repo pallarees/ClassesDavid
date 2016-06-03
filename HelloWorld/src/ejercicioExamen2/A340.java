@@ -2,20 +2,22 @@ package ejercicioExamen2;
 
 public class A340 extends Avion{
 	
-	final int MAXIMO_COMBUSTIBLE = 400;
 	
 	int pasajeros;
 	
-	int combustible;
+	protected int combustible;
+	
+	protected int maximoCombustible;
 	
 	public A340(int altitud, int velocidad, int peso, int pasajeros) {
 		super(altitud, velocidad, peso, pasajeros);
 		this.maximoPasajeros = 250;
+		this.maximoCombustible = 400;
 		this.pasajeros = pasajeros;
 	}
 	
 	public void cargarCombustible(){
-		if (combustible < MAXIMO_COMBUSTIBLE) combustible++;
+		if (combustible < maximoCombustible) combustible++;
 	}
 	
 	public void soltarCombustible(){

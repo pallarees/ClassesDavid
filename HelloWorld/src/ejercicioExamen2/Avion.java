@@ -34,7 +34,5 @@ public class Avion {
 	
 	public int asientosLibres() {
 		return maximoPasajeros - pasajeros;
-	}
-
-	
+	}	
 }
