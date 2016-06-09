@@ -1,19 +1,24 @@
 package EntregaFinal;
 
-public class Familiar {
+public class Familiar extends Persona{
 
-	String nombre;
-	
-	String apellido;
-	
-	String NIF;
-	
-	String direccion;
-	
-	String telefono;
-	
 	String nombreDelPadre;
-	
+
 	String relacionConmigo;
-	
+
+	public String getNombreDelPadre() {
+		return nombreDelPadre;
+	}
+
+	public void setNombreDelPadre(String nombreDelPadre) {
+		this.nombreDelPadre = nombreDelPadre;
+	}
+
+	public String getRelacionConmigo() {
+		return relacionConmigo;
+	}
+
+	public void setRelacionConmigo(String relacionConmigo) {
+		this.relacionConmigo = relacionConmigo;
+	}
 }

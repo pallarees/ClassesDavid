@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class Main {
 
+	public static String NIF;
+
 	public static void main(String[] args) {
 
 		Scanner scanner = new Scanner(System.in);
@@ -30,8 +32,6 @@ public class Main {
 	private static void gestionarAmigos(Scanner scanner) {
 		Amigo[] amigos = new Amigo[10];
 
-		int amigoActual = 0;
-
 		System.out.println("Introduce 1 para dar de alta un amigo");
 		System.out.println("Introduce 2 para modificar un amigo");
 		System.out.println("Introduce 3 para eliminar un amigo");
@@ -44,11 +44,13 @@ public class Main {
 		while (!opcion.equals("6")) {
 			switch (opcion) {
 			case "1":
-				altaAmigo(scanner, amigos, amigoActual++);
+				altaAmigo(scanner, amigos);
 				break;
 			case "2":
+				modificarAmigo(scanner, amigos);
 				break;
 			case "3":
+				eliminarAmigo(scanner, amigos);
 				break;
 			case "4":
 				mostrarTodosAmigos(amigos);
@@ -65,6 +67,46 @@ public class Main {
 			opcion = scanner.next();
 		}
 		System.out.println("FIN");
+	}
+
+	private static void eliminarAmigo(Scanner scanner, Amigo[] amigos) {
+		int posicion = encontrarPorNIF(scanner, amigos);
+		if (posicion < 0) {
+			System.out.println("No se ha encontrado.");
+		} else {
+			amigos[posicion] = null;
+		}
+
+	}
+
+	private static void modificarAmigo(Scanner scanner, Amigo[] amigos) {
+		int posicion = encontrarPorNIF(scanner, amigos);
+	
+
+		if (posicion < 0) {
+			System.out.println("No se ha encontrado.");
+		} else {
+			amigos[posicion] = obtenerAmigo(scanner);
+		}
+
+	}
+
+	private static int encontrarPorNIF(Scanner scanner, Amigo[] amigos) {
+		System.out.println("Introduce el NIF de tu amigo: ");
+
+		NIF = scanner.next();
+		boolean encontrado = false;
+
+		int i;
+
+		for (i = 0; i < amigos.length && !encontrado; i++) {
+			if (amigos[i].getNIF().equals(NIF)) {
+				encontrado = true;
+			}
+		}
+
+		return encontrado ? i : -1;
+
 	}
 
 	private static void mostrarAmigo(Scanner scanner, Amigo[] amigos) {
@@ -89,56 +131,77 @@ public class Main {
 		boolean encontrado = false;
 
 		for (Amigo amigo : amigos) {
-			if (amigo != null){
+			if (amigo != null) {
 				System.out.println(amigo);
 				encontrado = true;
 			}
 		}
-		
-		if (!encontrado) System.out.println("Aun no tienes amigos.");
+
+		if (!encontrado)
+			System.out.println("Aun no tienes amigos.");
 	}
 
-	private static void altaAmigo(Scanner scanner, Amigo[] amigos, int amigoActual) {
+	private static void altaAmigo(Scanner scanner, Amigo[] amigos) {
 
+		Amigo amigo = obtenerAmigo(scanner);
+
+		int posicionLibre = posicionLibre(amigos);
+
+		if (posicionLibre < 0) {
+			System.out.println("La base de datos está llena.");
+		} else {
+			amigos[posicionLibre] = amigo;
+		}
+	}
+
+	private static Amigo obtenerAmigo(Scanner scanner) {
 		Amigo amigo = new Amigo();
 
-		System.out.println("Introduce el nombre de tu amigo: ");
+		String nombre;
+		do {
+			System.out.println("Introduce el nombre de tu amigo: ");
+			nombre = scanner.next();
+		} while (nombre.equals(""));
 
-		amigo.setNombre(scanner.next());
+		amigo.setNombre(nombre);
 
-		System.out.println("Introduce el apellido de tu amigo: ");
+		String apellido;
 
-		amigo.setApellido(scanner.next());
+		do {
+			System.out.println("Introduce el apellido de tu amigo: ");
 
-		System.out.println("Introduce la dirección de tu amigo: ");
+			apellido = scanner.next();
+		} while (apellido.equals(""));
 
-		amigo.setDireccion(scanner.next());
+		amigo.setApellido(apellido);
 
-		System.out.println("Introduce el NIF de tu amigo: ");
+		String direccion;
 
-		amigo.setNIF(scanner.next());
+		do {
+			System.out.println("Introduce la dirección de tu amigo: ");
+			direccion = scanner.next();
+		} while (!direccion.equals(""));
+
+		amigo.setDireccion(direccion);
+
+		do {
+			System.out.println("Introduce el NIF de tu amigo: ");
+		} while (!NIF.equals(""));
+
+		amigo.setNIF(NIF);
 
 		System.out.println("Introduce el telefono de tu amigo: ");
 
 		amigo.setTelefono(scanner.next());
 
-		// System.out.println("Introduce la edad de tu amigo: ");
+		String edad;
 
-		// char edad = scanner.next();
-		//
-		// if (Character.isDigit(edad)) {
-		// amigo.setEdad(Integer.parseInt(edad));
-		// } else {
-		// System.out.println("Dato incorrecto. Introduce la edad de tu amigo:
-		// ");
-		// edad = scanner.next();
-		// while (!Character.isDigit(edad)) {
-		// System.out.println("Dato incorrecto. Introduce la edad de tu amigo:
-		// ");
-		// edad = scanner.next();
-		// }
-		// amigo.setEdad(Integer.parseInt(edad));
-		// }
+		do {
+			System.out.println("Introduce la edad de tu amigo: ");
+			edad = scanner.next();
+		} while (!esEntero(edad) && !edad.equals(""));
+
+		amigo.setEdad(edad.equals("") ? 0 : Integer.parseInt(edad));
 
 		Club club = new Club();
 
@@ -150,37 +213,38 @@ public class Main {
 
 		club.setDescripción(scanner.next());
 
-		System.out.println("Introduce el numero de miembros del club de tu amigo: ");
+		String miembros;
+		do {
+			System.out.println("Introduce el numero de miembros del club de tu amigo: ");
+			miembros = scanner.next();
+		} while (!esEntero(miembros) && !miembros.equals(""));
 
-		// String miembros = scanner.next();
-		//
-		// if (miembros.length() > 0) {
-		// if (esEntero(miembros)) {
-		// club.setNumeroMiembros(Integer.parseInt(miembros));
-		// } else {
-		// while (!scanner.hasNextInt()) {
-		// System.out.println("Dato incorrecto. el numero de miembros del club
-		// de tu amigo: ");
-		// miembros = scanner.next();
-		// }
-		// club.setNumeroMiembros(Integer.parseInt(miembros));
-		// }
-		// }
+		club.setNumeroMiembros(miembros.equals("") ? 0 : Integer.parseInt(miembros));
 
 		amigo.setClub(club);
 
-		amigos[amigoActual++] = amigo;
+		return amigo;
+	}
 
-		System.out.println(amigo);
+	private static int posicionLibre(Amigo[] amigos) {
+		for (int i = 0; i < amigos.length; i++) {
+			if (amigos[i] == null)
+				return i;
+		}
+		return -1;
 	}
 
 	private static boolean esEntero(String cadena) {
-		try {
-			Integer.parseInt(cadena);
-			return true;
-		} catch (NumberFormatException nfe) {
+		boolean correcto=false;
+		if(!cadena.isEmpty()){
+			correcto= true;
+			for(int i=0; i<cadena.length() && correcto; i++){
+				if(!Character.isDigit(cadena.charAt(i))){ 
+					correcto= false;
+				}
+			}
 		}
-		return false;
+		return correcto;
 	}
 
 }
