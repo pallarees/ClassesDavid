@@ -12,7 +12,7 @@ public class Main {
 
 		System.out.println("¿Quieres gestionar amigos o familiares? (A/F): ");
 
-		String opcion = scanner.next();
+		String opcion = scanner.nextLine();
 		if (opcion.length() > 0) {
 			while (!(opcion.equals("A") || opcion.equals("F"))) {
 				System.out.println("Dato incorrecto. ¿Quieres gestionar amigos o familiares? (A/F) ");
@@ -22,11 +22,220 @@ public class Main {
 			if (opcion.equals("A")) {
 				gestionarAmigos(scanner);
 			} else {
-				// gestionarFamilares(scanner);
+				gestionarFamilares(scanner);
 			}
 		}
 
 		scanner.close();
+	}
+
+	private static void gestionarFamilares(Scanner scanner) {
+		Familiar[] familiares = new Familiar[10];
+
+		System.out.println("Introduce 1 para dar de alta un familiar");
+		System.out.println("Introduce 2 para modificar un familiar");
+		System.out.println("Introduce 3 para eliminar un familiar");
+		System.out.println("Introduce 4 para mostrar todos los familiar");
+		System.out.println("Introduce 5 para mostrar un familiar");
+		System.out.println("Introduce 6 para salir");
+
+		String opcion = scanner.nextLine();
+
+		while (!opcion.equals("6")) {
+			switch (opcion) {
+			case "1":
+				altaFamiliar(scanner, familiares);
+				break;
+			case "2":
+				modificarFamiliar(scanner, familiares);
+				break;
+			case "3":
+				eliminarFamiliar(scanner, familiares);
+				break;
+			case "4":
+				mostrarTodosFamiliares(familiares);
+				break;
+			case "5":
+				mostrarFamiliar(scanner, familiares);
+				break;
+			default:
+				System.out.println("Opción incorrecta");
+				break;
+			}
+			System.out.println("Introduce otra opción para continuar: ");
+
+			opcion = scanner.nextLine();
+		}
+		System.out.println("FIN");
+		
+	}
+
+	private static void mostrarFamiliar(Scanner scanner, Familiar[] familiares) {
+		System.out.println("Introduce el NIF de tu familiar: ");
+
+		String NIF = scanner.nextLine();
+
+		boolean encontrado = false;
+
+		for (Familiar familiar : familiares) {
+			if (familiar != null && familiar.NIF.equals(NIF)) {
+				System.out.println(familiar);
+				encontrado = true;
+			}
+		}
+		if (!encontrado)
+			System.out.println("No se ha encontrado tu familiar.");
+		
+	}
+
+	private static void mostrarTodosFamiliares(Familiar[] familiares) {
+		boolean encontrado = false;
+
+		for (Familiar familiar : familiares) {
+			if (familiar != null) {
+				System.out.println(familiar);
+				encontrado = true;
+			}
+		}
+
+		if (!encontrado)
+			System.out.println("Aun no tienes amigos.");
+		
+	}
+
+	private static void eliminarFamiliar(Scanner scanner, Familiar[] familiares) {
+		int posicion = encontrarPorNIF(scanner, familiares);
+		if (posicion < 0 || familiares[posicion] == null) {
+			System.out.println("No se ha encontrado.");
+		} else {
+			familiares[posicion] = null;
+			System.out.println("Familiar borrado correctamente.");
+		}
+		
+	}
+
+	private static void modificarFamiliar(Scanner scanner, Familiar[] familiares) {
+		int posicion = encontrarPorNIF(scanner, familiares);
+		
+
+		if (posicion < 0) {
+			System.out.println("No se ha encontrado.");
+		} else {
+			familiares[posicion] = obtenerFamiliar(scanner);
+		}
+		
+	}
+
+	private static int encontrarPorNIF(Scanner scanner, Familiar[] familiares) {
+		System.out.println("Introduce el NIF de tu familiar: ");
+
+		NIF = scanner.nextLine();
+		boolean encontrado = false;
+
+		int i = 0;
+
+		for (; i < familiares.length && !encontrado; i++) {
+			if (familiares[i] != null && familiares[i].getNIF().equals(NIF)) {
+				encontrado = true;
+			}
+		}
+
+		i--;
+		
+		return encontrado ? i : -1;
+
+	}
+
+	private static void altaFamiliar(Scanner scanner, Familiar[] familiares) {
+		Familiar familiar = obtenerFamiliar(scanner);
+
+		int posicionLibre = posicionLibre(familiares);
+		
+		if (posicionLibre < 0) {
+			System.out.println("La base de datos está llena.");
+		} else {
+			familiares[posicionLibre] = familiar;
+		}
+		
+	}
+
+	private static int posicionLibre(Familiar[] familiares) {
+		for (int i = 0; i < familiares.length; i++) {
+			if (familiares[i] == null)
+				return i;
+		}
+		return -1;
+	}
+
+	private static Familiar obtenerFamiliar(Scanner scanner) {
+		Familiar familiar = new Familiar();
+
+		String nombre;
+		do {
+			System.out.println("Introduce el nombre de tu familiar: ");
+			nombre = scanner.nextLine();
+		} while (nombre.equals(""));
+
+		familiar.setNombre(nombre);
+
+		String apellido;
+
+		do {
+			System.out.println("Introduce el apellido de tu familiar: ");
+
+			apellido = scanner.nextLine();
+		} while (apellido.equals(""));
+
+		familiar.setApellido(apellido);
+
+		String direccion;
+
+		do {
+			System.out.println("Introduce la dirección de tu familiar: ");
+			direccion = scanner.nextLine();
+		} while (direccion.equals(""));
+
+		familiar.setDireccion(direccion);
+
+		do {
+			System.out.println("Introduce el NIF de tu familiar: ");
+			NIF = scanner.nextLine();
+		} while (NIF.equals(""));
+
+		familiar.setNIF(NIF);
+
+		System.out.println("Introduce el telefono de tu familiar: ");
+
+		familiar.setTelefono(scanner.nextLine());
+
+		String edad;
+
+		do {
+			System.out.println("Introduce la edad de tu familiar: ");
+			edad = scanner.nextLine();
+		} while (!esEntero(edad) && !edad.equals(""));
+
+		familiar.setEdad(edad.equals("") ? 0 : Integer.parseInt(edad));
+
+		String nombreDelPadre;
+		
+		do {
+			System.out.println("Introduce el nombre del padre de tu familiar: ");
+			nombreDelPadre = scanner.nextLine();
+		} while (nombreDelPadre.equals(""));
+
+		familiar.setNombreDelPadre(nombreDelPadre);
+		
+		String relacionConmigo;
+		
+		do {
+			System.out.println("Introduce la relación con tu familiar: ");
+			relacionConmigo = scanner.nextLine();
+		} while (relacionConmigo.equals(""));
+
+		familiar.setRelacionConmigo(relacionConmigo);
+
+		return familiar;
 	}
 
 	private static void gestionarAmigos(Scanner scanner) {
@@ -39,7 +248,7 @@ public class Main {
 		System.out.println("Introduce 5 para mostrar un amigo");
 		System.out.println("Introduce 6 para salir");
 
-		String opcion = scanner.next();
+		String opcion = scanner.nextLine();
 
 		while (!opcion.equals("6")) {
 			switch (opcion) {
@@ -64,17 +273,18 @@ public class Main {
 			}
 			System.out.println("Introduce otra opción para continuar: ");
 
-			opcion = scanner.next();
+			opcion = scanner.nextLine();
 		}
 		System.out.println("FIN");
 	}
 
 	private static void eliminarAmigo(Scanner scanner, Amigo[] amigos) {
 		int posicion = encontrarPorNIF(scanner, amigos);
-		if (posicion < 0) {
+		if (posicion < 0 || amigos[posicion] == null) {
 			System.out.println("No se ha encontrado.");
 		} else {
 			amigos[posicion] = null;
+			System.out.println("Amigo borrado correctamente.");
 		}
 
 	}
@@ -94,17 +304,19 @@ public class Main {
 	private static int encontrarPorNIF(Scanner scanner, Amigo[] amigos) {
 		System.out.println("Introduce el NIF de tu amigo: ");
 
-		NIF = scanner.next();
+		NIF = scanner.nextLine();
 		boolean encontrado = false;
 
-		int i;
+		int i = 0;
 
-		for (i = 0; i < amigos.length && !encontrado; i++) {
-			if (amigos[i].getNIF().equals(NIF)) {
+		for (; i < amigos.length && !encontrado; i++) {
+			if (amigos[i] != null && amigos[i].getNIF().equals(NIF)) {
 				encontrado = true;
 			}
 		}
 
+		i--;
+		
 		return encontrado ? i : -1;
 
 	}
@@ -112,7 +324,7 @@ public class Main {
 	private static void mostrarAmigo(Scanner scanner, Amigo[] amigos) {
 		System.out.println("Introduce el NIF de tu amigo: ");
 
-		String NIF = scanner.next();
+		String NIF = scanner.nextLine();
 
 		boolean encontrado = false;
 
@@ -147,6 +359,8 @@ public class Main {
 
 		int posicionLibre = posicionLibre(amigos);
 
+		System.out.println(posicionLibre);
+		
 		if (posicionLibre < 0) {
 			System.out.println("La base de datos está llena.");
 		} else {
@@ -160,7 +374,7 @@ public class Main {
 		String nombre;
 		do {
 			System.out.println("Introduce el nombre de tu amigo: ");
-			nombre = scanner.next();
+			nombre = scanner.nextLine();
 		} while (nombre.equals(""));
 
 		amigo.setNombre(nombre);
@@ -170,7 +384,7 @@ public class Main {
 		do {
 			System.out.println("Introduce el apellido de tu amigo: ");
 
-			apellido = scanner.next();
+			apellido = scanner.nextLine();
 		} while (apellido.equals(""));
 
 		amigo.setApellido(apellido);
@@ -179,26 +393,27 @@ public class Main {
 
 		do {
 			System.out.println("Introduce la dirección de tu amigo: ");
-			direccion = scanner.next();
-		} while (!direccion.equals(""));
+			direccion = scanner.nextLine();
+		} while (direccion.equals(""));
 
 		amigo.setDireccion(direccion);
 
 		do {
 			System.out.println("Introduce el NIF de tu amigo: ");
-		} while (!NIF.equals(""));
+			NIF = scanner.nextLine();
+		} while (NIF.equals(""));
 
 		amigo.setNIF(NIF);
 
 		System.out.println("Introduce el telefono de tu amigo: ");
 
-		amigo.setTelefono(scanner.next());
+		amigo.setTelefono(scanner.nextLine());
 
 		String edad;
 
 		do {
 			System.out.println("Introduce la edad de tu amigo: ");
-			edad = scanner.next();
+			edad = scanner.nextLine();
 		} while (!esEntero(edad) && !edad.equals(""));
 
 		amigo.setEdad(edad.equals("") ? 0 : Integer.parseInt(edad));
@@ -207,16 +422,16 @@ public class Main {
 
 		System.out.println("Introduce el nombre del club de tu amigo: ");
 
-		club.setNombre(scanner.next());
+		club.setNombre(scanner.nextLine());
 
 		System.out.println("Introduce la descripción del club de tu amigo: ");
 
-		club.setDescripción(scanner.next());
+		club.setDescripción(scanner.nextLine());
 
 		String miembros;
 		do {
 			System.out.println("Introduce el numero de miembros del club de tu amigo: ");
-			miembros = scanner.next();
+			miembros = scanner.nextLine();
 		} while (!esEntero(miembros) && !miembros.equals(""));
 
 		club.setNumeroMiembros(miembros.equals("") ? 0 : Integer.parseInt(miembros));

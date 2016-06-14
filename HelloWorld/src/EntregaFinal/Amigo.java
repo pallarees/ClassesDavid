@@ -14,10 +14,7 @@ public class Amigo extends Persona {
 
 	@Override
 	public String toString() {
-		return "Amigo [club=" + club + "]";
+		return "Amigo [club=" + club + ", nombre=" + nombre + ", apellido=" + apellido + ", NIF=" + NIF + ", direccion="
+				+ direccion + ", telefono=" + telefono + ", edad=" + edad + "]";
 	}
-	
-
-	
-	
 }
